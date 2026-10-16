@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>fakebenad - Katalog thrift pilihan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000000; --surface:#0E0E0E; --tile:#262626; --ink:#F4F4F4; --muted:#9C9C9C;
+  --line:#2A2A2A; --accent:#FFD83D; --sticker:#FFD83D; --kraft:#D8BE92; --wa:#0F7A3E; --sold:#FF6B5E;
+  --f-display:'Bricolage Grotesque','Arial Black',system-ui,sans-serif;
+  --f-body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --hh:57px;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000; --surface:#0E0E0E; --tile:#262626; --ink:#F4F4F4; --muted:#9C9C9C;
+    --line:#2A2A2A; --accent:#FFD83D; --kraft:#D8BE92; --sold:#FF6B5E; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000000; --surface:#0E0E0E; --tile:#262626; --ink:#F4F4F4; --muted:#9C9C9C;
+  --line:#2A2A2A; --accent:#FFD83D; --kraft:#D8BE92; --sold:#FF6B5E; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{background:var(--bg);scroll-padding-top:calc(env(safe-area-inset-top,0px) + 120px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 var(--f-body);-webkit-font-smoothing:antialiased}
+body:has(dialog[open]){overflow:hidden}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+img,svg{max-width:100%}
+.wrap{width:min(1180px,100%);margin-inline:auto;padding-inline:clamp(16px,4vw,32px)}
+.muted{color:var(--muted)}
+h1,h2,h3{margin:0}
+h2{font:700 clamp(1.5rem,3.4vw,2rem)/1.1 var(--f-display);letter-spacing:-.02em}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{display:flex;align-items:center;gap:.5rem;font:800 1.15rem var(--f-display);color:inherit;text-decoration:none;letter-spacing:-.01em}
+.seg{display:flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:999px}
+.seg button{border:0;background:transparent;color:var(--ink);font:600 .9rem var(--f-body);padding:.35rem .9rem;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.7rem 1.1rem;border-radius:8px;border:1px solid transparent;font:600 1rem var(--f-body);text-decoration:none;cursor:pointer;min-height:44px}
+.btn-primary{background:var(--ink);color:var(--bg)}
+.btn-wa{background:var(--wa);color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn[aria-disabled="true"]{opacity:.55;pointer-events:none}
+.btn.sm{min-height:36px;padding:.35rem .7rem;font-size:.88rem}
+
+/* hero */
+.hero{padding:clamp(28px,6vw,64px) 0 clamp(20px,4vw,40px)}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:32px;align-items:center}
+@media (max-width:820px){.hero .wrap{grid-template-columns:1fr}}
+h1{font:800 clamp(2.5rem,7.4vw,5rem)/.98 var(--f-display);letter-spacing:-.03em;margin-bottom:1rem;text-wrap:balance}
+.lede{max-width:46ch;color:var(--muted);font-size:1.075rem;margin:0}
+.hang{position:relative;display:inline-block;margin-top:44px}
+.hang::before{content:"";position:absolute;left:50%;top:-34px;width:2px;height:48px;background:var(--ink);opacity:.6;transform:translateX(-50%);z-index:2}
+.drop{padding:30px 20px 16px;color:#1d1a14;background:radial-gradient(circle at 50% 14px,var(--bg) 0 4.5px,transparent 5px),var(--kraft);clip-path:polygon(0 14px,14px 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%)}
+.drop strong{display:block;font:700 1.05rem var(--f-display)}
+.drop span.when{font-size:.9rem;opacity:.8}
+.cd{display:flex;gap:16px;margin-top:10px}
+.cd div{display:flex;flex-direction:column;align-items:flex-start;min-width:44px}
+.cd b{font:800 2rem/1 var(--f-display);font-variant-numeric:tabular-nums}
+.cd small{font-size:.78rem;opacity:.8}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.rail{width:100%;max-width:560px;justify-self:end;height:auto}
+.swing{animation:swing 2.6s ease-out both}
+@keyframes swing{0%{transform:rotate(0)}15%{transform:rotate(5deg)}35%{transform:rotate(-3.5deg)}55%{transform:rotate(2deg)}75%{transform:rotate(-1deg)}100%{transform:rotate(0)}}
+
+/* catalog */
+.catbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--hh));z-index:15;background:var(--bg);border-bottom:1px solid var(--line)}
+.catbar .wrap{display:flex;gap:8px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.catbar .wrap::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:transparent;color:var(--ink);padding:.4rem .9rem;border-radius:999px;font:600 .92rem var(--f-body);cursor:pointer;min-height:38px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;padding-block:16px 8px;align-items:center}
+.tools input[type=search],.tools select{height:44px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:0 .75rem;font:inherit}
+.tools input[type=search]{flex:1 1 220px}
+.tools select{flex:0 1 150px}
+.check{display:inline-flex;align-items:center;gap:.5rem;font-size:.92rem;min-height:44px}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.count{margin:0 0 20px;color:var(--muted);font-size:.92rem}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:30px 14px;padding-bottom:56px}
+@media (min-width:700px){.grid{grid-template-columns:repeat(3,1fr);gap:38px 22px}}
+@media (min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
+.item{position:relative}
+.tile{position:relative;aspect-ratio:1/1.08;background:var(--tile);border-radius:4px;display:grid;place-items:center}
+.tile svg.pic{width:76%;height:auto}
+.tagwrap{position:absolute;top:0;right:12px;transform-origin:top center;transform:rotate(var(--rot,3deg));z-index:1}
+.string{position:absolute;left:50%;top:0;width:1.5px;height:22px;background:var(--ink);opacity:.55;z-index:2}
+.tag{margin-top:12px;padding:20px 9px 7px;min-width:78px;text-align:center;color:#1d1a14;background:radial-gradient(circle at 50% 10px,var(--tile) 0 3.5px,transparent 4px),var(--kraft);clip-path:polygon(0 10px,10px 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)}
+.tcode{display:block;font-size:.7rem;opacity:.75}
+.tprice{display:block;font:800 1.05rem/1.2 var(--f-display);font-variant-numeric:tabular-nums}
+.tprice small{font:600 .65rem var(--f-body);margin-right:2px}
+.badge{position:absolute;left:10px;top:10px;padding:.2rem .55rem;border-radius:4px;font:700 .78rem var(--f-body);background:var(--sticker);color:#1d1a14;transform:rotate(-3deg)}
+.badge.hold{background:var(--ink);color:var(--bg)}
+.stamp{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%) rotate(-12deg);border:3px solid var(--sold);color:var(--sold);padding:.15rem .7rem;font:800 1.3rem var(--f-display);border-radius:4px;letter-spacing:.03em;background:color-mix(in srgb,var(--tile) 70%,transparent)}
+.is-sold svg.pic{filter:grayscale(1);opacity:.4}
+.heart{position:absolute;left:6px;bottom:6px;z-index:3;width:44px;height:44px;border-radius:50%;border:0;background:transparent;color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.heart svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.heart[aria-pressed="true"]{color:#D6336C}
+.heart[aria-pressed="true"] svg{fill:currentColor}
+.meta{margin-top:10px}
+.meta h3{font:600 1rem/1.25 var(--f-body);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.open{background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.open::after{content:"";position:absolute;inset:0}
+.open:focus-visible{outline:none}
+.open:focus-visible::after{outline:3px solid var(--accent);outline-offset:4px;border-radius:6px}
+.brandname{margin:2px 0 8px;color:var(--muted);font-size:.88rem}
+.badges{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sz{border:1.5px solid var(--ink);border-radius:4px;padding:0 .45rem;font:700 .8rem/1.5 var(--f-body)}
+.cdn{display:inline-flex;align-items:center;gap:.35rem;font-size:.85rem}
+.cdn::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--dot)}
+.c-new{--dot:#2E9E5B}.c-good{--dot:#3A78C2}.c-minus{--dot:#D98A1F}
+.empty{grid-column:1/-1;padding:48px 0;text-align:center}
+.empty p{margin:0 0 8px}
+
+/* how */
+.how{padding:56px 0;border-top:1px solid var(--line)}
+.how .wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+@media (max-width:760px){.how .wrap{grid-template-columns:1fr}}
+ol.steps{list-style:none;margin:20px 0 0;padding:0;counter-reset:s;display:grid;gap:18px}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start}
+ol.steps li::before{content:counter(s);width:40px;height:40px;display:grid;place-items:center;background:var(--sticker);color:#1d1a14;font:800 1.1rem var(--f-display);border-radius:50%}
+ol.steps b{display:block}
+ol.steps span{color:var(--muted)}
+.pay{margin-top:20px;display:grid;gap:14px}
+.pay dt{font-weight:700}
+.pay dd{margin:2px 0 0;color:var(--muted)}
+.faq{padding:0 0 56px}
+details{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;padding:16px 0;font-weight:600;min-height:44px}
+details p{margin:0 0 16px;color:var(--muted);max-width:70ch}
+footer{border-top:1px solid var(--line);padding:28px 0 96px;color:var(--muted);font-size:.92rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
+footer a{color:inherit}
+
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:18;display:inline-flex;align-items:center;gap:.5rem;background:var(--wa);color:#fff;text-decoration:none;font:600 .95rem var(--f-body);padding:.75rem 1.1rem;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.ico{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* dialog */
+.dlg{border:0;padding:0;border-radius:14px;background:var(--surface);color:var(--ink);width:min(900px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto}
+.dlg[open]{display:grid;grid-template-columns:1fr 1fr}
+@media (max-width:700px){.dlg[open]{grid-template-columns:1fr}}
+.dlg::backdrop{background:rgba(10,14,18,.6)}
+.dlg .tile{border-radius:0;aspect-ratio:auto;min-height:340px}
+@media (max-width:700px){.dlg .tile{min-height:280px}}
+.dlg .tile .tagwrap{right:20px;transform:rotate(3deg)}
+.info{padding:26px 24px 24px;position:relative}
+.info .x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:transparent;color:var(--ink);border-radius:50%;cursor:pointer;display:grid;place-items:center}
+.info .who{display:flex;gap:14px;color:var(--muted);font-size:.9rem;padding-right:44px}
+.info h2{font:800 1.75rem/1.1 var(--f-display);margin:6px 0 8px;letter-spacing:-.02em}
+.price{font:700 1.5rem var(--f-display);margin:0 0 12px}
+.note{margin:14px 0 0;color:var(--muted)}
+.measures{display:grid;grid-template-columns:auto 1fr;gap:6px 20px;margin:16px 0;padding:14px 0;border-block:1px solid var(--line)}
+.measures dt{color:var(--muted)}
+.measures dd{margin:0;font-weight:600}
+.actions{display:grid;gap:10px}
+.small{font-size:.86rem;color:var(--muted);margin:14px 0 0}
+
+/* admin */
+.admin{padding:32px 0 96px}
+.admin h2{margin:36px 0 14px}
+.adminhead{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.admin .adminhead h2{margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:20px}
+.stat{background:var(--surface);padding:16px}
+.stat span{display:block;color:var(--muted);font-size:.88rem}
+.stat b{font:800 1.6rem/1.2 var(--f-display)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:680px}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:.85rem;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td input,td select,.addform input,.addform select{height:40px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:0 .6rem;font:inherit;width:100%}
+td input{max-width:130px}
+td small{display:block;color:var(--muted);font-size:.8rem}
+.addform{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;align-items:end}
+.addform label span{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+.addform input[type=color]{padding:2px;height:40px}
+.login{padding:56px 0 96px}
+.loginbox{max-width:380px;margin-inline:auto;display:grid;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px}
+.loginbox label span{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+.loginbox input{height:44px;width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:0 .75rem;font:inherit}
+.loginbox p{margin:0}
+.err{color:var(--sold);font-size:.9rem}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+.tile img.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:4px}
+.dlg .tile img.photo{border-radius:0}
+.is-sold img.photo{filter:grayscale(1);opacity:.45}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.thumb{position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:2px solid transparent;padding:0;background:var(--tile);cursor:pointer}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb[aria-current="true"]{border-color:var(--accent)}
+.thumb .rm{position:absolute;top:2px;right:2px;width:26px;height:26px;border:0;border-radius:50%;background:rgba(0,0,0,.8);color:#fff;font-size:16px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0}
+.gal{position:absolute;left:12px;right:12px;bottom:12px;display:flex;gap:8px;z-index:3}
+.gal .thumb{width:56px;height:56px;border-color:rgba(255,255,255,.4)}
+.gal .thumb[aria-current="true"]{border-color:var(--accent)}
+.rowpic{display:block;width:44px;height:44px;border-radius:6px;object-fit:cover;background:var(--tile);flex:none}
+.namecell{display:flex;align-items:center;gap:10px}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.addform input[type=file]{padding:6px;height:auto;min-height:40px}
+
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:.65rem 1rem;border-radius:8px;font-weight:600;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50;max-width:calc(100vw - 32px)}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .swing{animation:none}
+  #toast{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="fakebenad, ke atas">
+      <svg class="ico" style="width:26px;height:26px" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8a2.5 2.5 0 1 0-2.5-2.5"/><path d="M12 8v2L3 17a1.5 1.5 0 0 0 1 2.6h16a1.5 1.5 0 0 0 1-2.6L12 10"/></svg>
+      fakebenad
+    </a>
+    <div class="seg" role="group" aria-label="Tampilan">
+      <button type="button" data-view="shop" aria-pressed="true">Toko</button>
+      <button type="button" data-view="admin" aria-pressed="false">Admin</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- TOKO -->
+  <div id="shopView">
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <h1>Barang unik. Stoknya cuma satu.</h1>
+          <p class="lede">Thrift pilihan yang dicek satu per satu. Lihat ukuran asli dan kondisinya, lalu pesan lewat WhatsApp.</p>
+          <div class="hang">
+            <div class="drop">
+              <strong>Drop berikutnya</strong>
+              <span class="when">Setiap Jumat, 19.00 WIB</span>
+              <div class="cd" aria-live="off">
+                <div><b id="cdD">00</b><small>hari</small></div>
+                <div><b id="cdH">00</b><small>jam</small></div>
+                <div><b id="cdM">00</b><small>menit</small></div>
+                <div><b id="cdS">00</b><small>detik</small></div>
+              </div>
+            </div>
+          </div>
+          <div class="cta">
+            <a class="btn btn-primary" href="#katalog">Lihat katalog</a>
+            <a class="btn btn-ghost" href="#cara">Cara belanja</a>
+          </div>
+        </div>
+        <svg class="rail" id="rail" viewBox="0 0 540 215" role="img" aria-label="Rak gantung berisi jaket, kaos, celana, dan tas"></svg>
+      </div>
+    </section>
+
+    <section id="katalog" aria-label="Katalog">
+      <div class="catbar"><div class="wrap" id="cats" role="group" aria-label="Kategori"></div></div>
+      <div class="wrap">
+        <div class="tools">
+          <input type="search" id="q" placeholder="Cari nama, merek, atau kode" aria-label="Cari barang">
+          <select id="fSize" aria-label="Ukuran"></select>
+          <select id="fCond" aria-label="Kondisi">
+            <option value="">Semua kondisi</option>
+            <option>Seperti baru</option>
+            <option>Bagus</option>
+            <option>Ada minus</option>
+          </select>
+          <select id="fSort" aria-label="Urutkan">
+            <option value="new">Terbaru</option>
+            <option value="low">Harga terendah</option>
+            <option value="high">Harga tertinggi</option>
+          </select>
+          <label class="check"><input type="checkbox" id="fSold"> Sembunyikan yang terjual</label>
+        </div>
+        <p class="count" id="count" aria-live="polite"></p>
+        <div class="grid" id="grid"></div>
+      </div>
+    </section>
+
+    <section class="how" id="cara">
+      <div class="wrap">
+        <div>
+          <h2>Cara belanja</h2>
+          <ol class="steps">
+            <li><div><b>Pilih barang</b><span>Cek foto, ukuran asli, dan catatan kondisi di halaman detail.</span></div></li>
+            <li><div><b>Chat admin lewat WhatsApp</b><span>Tombol beli mengisi pesan otomatis. Admin memastikan barangnya masih ada.</span></div></li>
+            <li><div><b>Bayar</b><span>Kamu menerima link pembayaran. Barang di-hold 30 menit selama kamu membayar.</span></div></li>
+            <li><div><b>Barang dikirim</b><span>Resi dikirim lewat WhatsApp setelah pembayaran terkonfirmasi.</span></div></li>
+          </ol>
+        </div>
+        <div>
+          <h2>Pembayaran dan pengiriman</h2>
+          <dl class="pay">
+            <div><dt>Metode bayar</dt><dd>Transfer bank, e-wallet (GoPay, OVO, DANA, ShopeePay), dan QRIS.</dd></div>
+            <div><dt>Pengiriman</dt><dd>Ke seluruh Indonesia lewat JNE, J&amp;T, atau SiCepat. Ongkir dihitung saat chat.</dd></div>
+            <div><dt>Stok</dt><dd>Setiap barang hanya ada satu. Yang sudah ditandai terjual tidak bisa dipesan lagi.</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq" id="faq">
+      <div class="wrap">
+        <h2 style="margin-bottom:12px">Pertanyaan umum</h2>
+        <details><summary>Bagaimana cara tahu ukuran yang pas?</summary><p>Ukuran thrift sering berbeda dari label. Bandingkan lebar dada, panjang, atau pinggang di halaman detail dengan baju yang biasa kamu pakai.</p></details>
+        <details><summary>Apa arti kondisi "Ada minus"?</summary><p>Barang tetap layak pakai, tetapi punya cacat kecil seperti pudar atau noda tipis. Detailnya selalu ditulis di catatan kondisi.</p></details>
+        <details><summary>Bisakah barang dikembalikan?</summary><p>Karena barang bekas dan stoknya satu, retur hanya untuk barang yang berbeda dari deskripsi. Kirim video unboxing maksimal 1x24 jam setelah barang tiba.</p></details>
+      </div>
+    </section>
+  </div>
+
+  <!-- LOGIN -->
+  <section class="login" id="loginView" hidden>
+    <div class="wrap">
+      <form class="loginbox" id="loginForm">
+        <h2>Masuk admin</h2>
+        <p class="muted">Khusus pengelola fakebenad.</p>
+        <label><span>Username</span><input name="user" autocomplete="username" required></label>
+        <label><span>Password</span><input name="pass" type="password" autocomplete="current-password" required></label>
+        <p class="err" id="loginErr" role="alert" hidden></p>
+        <button class="btn btn-primary" type="submit">Masuk</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ADMIN -->
+  <section class="admin" id="adminView" hidden>
+    <div class="wrap">
+      <div class="adminhead"><h2>Dashboard admin</h2><button class="btn btn-ghost sm" type="button" id="logout">Keluar</button></div>
+      <p class="muted" style="margin:6px 0 0">Pratinjau dengan data demo. Perubahan tersimpan di browser ini dan langsung terlihat di tab Toko.</p>
+      <div class="stats" id="stats"></div>
+
+      <h2>Stok dan pesanan</h2>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Barang</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead>
+        <tbody id="adminRows"></tbody>
+      </table></div>
+
+      <input type="file" id="rowPhoto" class="vh" accept="image/*" multiple tabindex="-1" aria-hidden="true">
+
+      <h2>Tambah barang</h2>
+      <form class="addform" id="addForm">
+        <label><span>Nama barang</span><input name="name" required placeholder="Contoh: Kaos polos putih"></label>
+        <label><span>Merek</span><input name="brand" placeholder="Opsional"></label>
+        <label><span>Kategori</span><select name="category"></select></label>
+        <label><span>Ukuran</span><input name="size" required placeholder="M, 32, atau 42"></label>
+        <label><span>Kondisi</span><select name="condition"><option>Seperti baru</option><option selected>Bagus</option><option>Ada minus</option></select></label>
+        <label><span>Harga (Rp)</span><input name="price" type="number" min="0" step="5000" required placeholder="100000"></label>
+        <label><span>Warna ilustrasi (jika tanpa foto)</span><input name="color" type="color" value="#3A78C2"></label>
+        <div style="grid-column:1/-1">
+          <label><span>Foto barang (maks. 4, otomatis dikecilkan)</span><input type="file" id="newPhotos" accept="image/*" multiple></label>
+          <div class="thumbs" id="newThumbs"></div>
+          <p class="small" style="margin:8px 0 0">Foto disimpan di browser ini. Foto pertama jadi foto utama di katalog.</p>
+        </div>
+        <button class="btn btn-primary" type="submit">Tambah ke katalog</button>
+      </form>
+      <h2>Keamanan</h2>
+      <form class="addform" id="pwForm">
+        <label><span>Password saat ini</span><input name="old" type="password" autocomplete="current-password" required></label>
+        <label><span>Password baru (min. 8 karakter)</span><input name="new" type="password" minlength="8" autocomplete="new-password" required></label>
+        <button class="btn btn-primary" type="submit">Ganti password</button>
+      </form>
+      <p style="margin-top:28px"><button class="btn btn-ghost sm" type="button" id="resetDemo">Reset data demo</button></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>fakebenad. Thrift pilihan, dicek satu per satu.</span>
+    <span><a href="#" id="footWa" target="_blank" rel="noopener">WhatsApp</a> &nbsp; Instagram @fakebenad</span>
+  </div>
+</footer>
+
+<a class="fab" id="fab" href="#" target="_blank" rel="noopener">
+  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+  Chat admin
+</a>
+
+<dialog class="dlg" id="dlg" aria-label="Detail barang"></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ====== PENGATURAN: ganti nomor WhatsApp di sini (format 62, tanpa + atau 0) ====== */
+var WA_NUMBER = '6283835140171';
+
+var CATS = ['Semua','Atasan','Jaket','Bawahan','Sepatu','Tas','Aksesori'];
+var SHAPE_BY_CAT = {Atasan:'tee',Jaket:'jacket',Bawahan:'pants',Sepatu:'shoe',Tas:'bag',Aksesori:'cap'};
+var CKEY = {'Seperti baru':'new','Bagus':'good','Ada minus':'minus'};
+var KEY = 'gt-demo-v1';
+var nf = new Intl.NumberFormat('id-ID');
+var rp = function(n){ return 'Rp ' + nf.format(n); };
+var $ = function(s){ return document.querySelector(s); };
+var esc = function(s){ return String(s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+
+/* ====== data ====== */
+function seed(){
+  return [
+    {id:1,name:'Jaket denim trucker',brand:"Levi's",category:'Jaket',size:'L',condition:'Bagus',price:285000,color:'#4B6C93',pattern:'denim',shape:'jacket',fresh:true,status:'ready',note:'Wash alami dan kancing lengkap. Tidak ada sobek.',measures:[['Lebar dada','58 cm'],['Panjang','64 cm'],['Panjang lengan','60 cm']]},
+    {id:2,name:'Kaos band vintage 90an',brand:'Hanes',category:'Atasan',size:'M',condition:'Bagus',price:145000,color:'#45454B',pattern:'plain',shape:'tee',fresh:true,status:'ready',note:'Hitam sedikit pudar khas vintage. Jahitan masih kuat.',measures:[['Lebar dada','52 cm'],['Panjang','70 cm']]},
+    {id:3,name:'Kemeja flanel kotak merah',brand:'Uniqlo',category:'Atasan',size:'L',condition:'Seperti baru',price:125000,color:'#B0392F',pattern:'check',shape:'shirt',status:'ready',note:'Bahan tebal dan nyaman. Tanpa noda.',measures:[['Lebar dada','56 cm'],['Panjang','72 cm'],['Panjang lengan','62 cm']]},
+    {id:4,name:'Celana cargo army',brand:'Dickies',category:'Bawahan',size:'32',condition:'Bagus',price:195000,color:'#6B7348',pattern:'plain',shape:'pants',status:'ready',note:'Kantong samping lengkap. Ritsleting lancar.',measures:[['Pinggang','41 cm'],['Panjang','102 cm'],['Lebar paha','31 cm']]},
+    {id:5,name:'Sneakers kanvas putih',brand:'Converse',category:'Sepatu',size:'42',condition:'Ada minus',price:175000,color:'#ECEAE4',pattern:'plain',shape:'shoe',status:'ready',note:'Sol agak menguning dan ada noda kecil di sisi kiri. Insole bersih.',measures:[['Panjang insole','27 cm'],['Lebar','10 cm']]},
+    {id:6,name:'Tote bag kanvas',brand:'Tanpa merek',category:'Tas',size:'All size',condition:'Seperti baru',price:65000,color:'#C9B27D',pattern:'plain',shape:'bag',status:'ready',note:'Tali kuat dan ada kantong dalam berzip.',measures:[['Lebar','40 cm'],['Tinggi','35 cm'],['Panjang tali','58 cm']]},
+    {id:7,name:'Kaos stripe navy',brand:'Gap',category:'Atasan',size:'M',condition:'Bagus',price:85000,color:'#27406B',pattern:'stripe',shape:'tee',status:'ready',note:'Garis masih tajam. Katun tebal.',measures:[['Lebar dada','51 cm'],['Panjang','68 cm']]},
+    {id:8,name:'Bomber jacket olive',brand:'Alpha Industries',category:'Jaket',size:'XL',condition:'Bagus',price:320000,color:'#5D6B45',pattern:'plain',shape:'jacket',status:'hold',holdUntil:Date.now()+22*60*1000,note:'Lapisan dalam oranye masih bagus. Ritsleting lancar.',measures:[['Lebar dada','62 cm'],['Panjang','66 cm'],['Panjang lengan','64 cm']]},
+    {id:9,name:'Jeans straight 501',brand:"Levi's",category:'Bawahan',size:'30',condition:'Ada minus',price:210000,color:'#3D5E8A',pattern:'denim',shape:'pants',status:'sold',note:'Lutut sedikit pudar. Tidak ada sobek.',measures:[['Pinggang','38 cm'],['Panjang','100 cm']]},
+    {id:10,name:'Sweater rajut krem',brand:'H&M',category:'Atasan',size:'M',condition:'Seperti baru',price:110000,color:'#CDBFA6',pattern:'plain',shape:'sweater',status:'ready',note:'Rajutan rapat dan tidak berbulu.',measures:[['Lebar dada','54 cm'],['Panjang','65 cm']]},
+    {id:11,name:'Sepatu lari retro',brand:'New Balance',category:'Sepatu',size:'41',condition:'Bagus',price:340000,color:'#8E9AA6',pattern:'plain',shape:'shoe',status:'ready',note:'Midsole masih empuk. Sol luar tipis di bagian tumit.',measures:[['Panjang insole','26 cm'],['Lebar','10 cm']]},
+    {id:12,name:'Topi baseball hitam',brand:'Nike',category:'Aksesori',size:'All size',condition:'Bagus',price:55000,color:'#3A3A40',pattern:'plain',shape:'cap',status:'ready',note:'Strap belakang bisa disetel. Logo bordir utuh.',measures:[['Lingkar kepala','54-60 cm']]},
+    {id:13,name:'Kemeja hawaii bermotif',brand:'Tanpa merek',category:'Atasan',size:'L',condition:'Bagus',price:95000,color:'#1F7A6D',pattern:'dots',shape:'shirt',fresh:true,status:'ready',note:'Motif cerah dan bahan adem.',measures:[['Lebar dada','57 cm'],['Panjang','74 cm']]},
+    {id:14,name:'Celana chino krem',brand:'Zara',category:'Bawahan',size:'31',condition:'Seperti baru',price:105000,color:'#C7B48A',pattern:'plain',shape:'pants',status:'ready',note:'Potongan slim. Warna masih rata.',measures:[['Pinggang','40 cm'],['Panjang','98 cm']]},
+    {id:15,name:'Windbreaker garis merah',brand:'Adidas',category:'Jaket',size:'M',condition:'Bagus',price:235000,color:'#D6452B',pattern:'stripe',shape:'jacket',status:'sold',note:'Ringan dan anti angin. Ritsleting lancar.',measures:[['Lebar dada','55 cm'],['Panjang','66 cm']]},
+    {id:16,name:'Tas selempang kulit',brand:'Tanpa merek',category:'Tas',size:'All size',condition:'Bagus',price:160000,color:'#6B3F2A',pattern:'plain',shape:'bag',status:'ready',note:'Kulit masih lentur. Tali bisa dipanjangkan.',measures:[['Lebar','28 cm'],['Tinggi','22 cm']]}
+  ];
+}
+function load(){ try{ var r=localStorage.getItem(KEY); if(r) return JSON.parse(r); }catch(e){} return null; }
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify({items:S.items,wish:S.wish})); return true; }catch(e){ return false; } }
+function code(i){ return 'GT-' + String(i.id).padStart(3,'0'); }
+
+var saved = load();
+var S = {
+  items: saved && saved.items ? saved.items : seed(),
+  wish: saved && saved.wish ? saved.wish : [],
+  cat:'Semua', size:'', cond:'', sort:'new', q:'', hideSold:false, onlyWish:false
+};
+
+/* ====== ilustrasi pakaian (placeholder, ganti dengan foto asli) ====== */
+function shade(hex,amt){
+  var n=parseInt(hex.slice(1),16), r=n>>16, g=(n>>8)&255, b=n&255;
+  var f=function(v){ return Math.max(0,Math.min(255,Math.round(amt<0? v*(1+amt) : v+(255-v)*amt))); };
+  return '#'+[f(r),f(g),f(b)].map(function(v){return v.toString(16).padStart(2,'0');}).join('');
+}
+function fillFor(item,uid){
+  var id='pt-'+uid, c=item.color, d='';
+  if(item.pattern==='stripe') d='<pattern id="'+id+'" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="'+c+'"/><rect width="16" height="5" fill="#fff" opacity=".55"/></pattern>';
+  else if(item.pattern==='check') d='<pattern id="'+id+'" width="20" height="20" patternUnits="userSpaceOnUse"><rect width="20" height="20" fill="'+c+'"/><rect width="20" height="7" fill="#000" opacity=".28"/><rect width="7" height="20" fill="#000" opacity=".28"/></pattern>';
+  else if(item.pattern==='dots') d='<pattern id="'+id+'" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="'+c+'"/><circle cx="4" cy="4" r="2.2" fill="#fff" opacity=".6"/><circle cx="12" cy="12" r="2.2" fill="#fff" opacity=".6"/></pattern>';
+  else if(item.pattern==='denim') d='<pattern id="'+id+'" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="'+c+'"/><path d="M0 0L16 16M-4 12L4 20M12 -4L20 4" stroke="#fff" opacity=".13" stroke-width="1.5"/></pattern>';
+  else return {defs:'',fill:c};
+  return {defs:'<defs>'+d+'</defs>',fill:'url(#'+id+')'};
+}
+function garment(item,uid){
+  var ff=fillFor(item,uid), f=ff.fill, st=shade(item.color,-.5);
+  var sw='stroke="'+st+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"';
+  var line=function(d,w){ return '<path d="'+d+'" fill="none" stroke="'+st+'" stroke-width="'+(w||2.5)+'" stroke-linecap="round" stroke-linejoin="round"/>'; };
+  var body='';
+  var jb='M64 34L86 26L100 40L114 26L136 34L178 66L170 152L150 150L142 96L142 172L58 172L58 96L50 150L30 152L22 66Z';
+  switch(item.shape){
+    case 'tee':
+      body='<path d="M62 36L84 28Q100 50 116 28L138 36L176 70L156 98L140 86L140 170L60 170L60 86L44 98L24 70Z" fill="'+f+'" '+sw+'/>'+line('M84 28Q100 50 116 28',5);
+      break;
+    case 'jacket':
+      body='<path d="'+jb+'" fill="'+f+'" '+sw+'/><path d="M86 26L100 40L114 26L112 46L100 60L88 46Z" fill="'+shade(item.color,-.2)+'" '+sw+'/>'+line('M100 60V172')+line('M68 128H90')+line('M110 128H132');
+      break;
+    case 'shirt':
+      body='<path d="'+jb+'" fill="'+f+'" '+sw+'/><path d="M86 26L100 40L114 26L112 46L100 60L88 46Z" fill="'+shade(item.color,.25)+'" '+sw+'/>'+line('M100 60V172',1.5)+[78,98,118,138,158].map(function(y){return '<circle cx="100" cy="'+y+'" r="2.4" fill="'+st+'"/>';}).join('');
+      break;
+    case 'sweater':
+      body='<path d="'+jb+'" fill="'+f+'" '+sw+'/>'+line('M86 26Q100 48 114 26',5)+line('M58 160H142')+line('M30 140L50 142');
+      break;
+    case 'pants':
+      body='<path d="M60 26H140L150 176H110L100 84L90 176H50Z" fill="'+f+'" '+sw+'/>'+line('M60 42H140')+line('M100 42V84')+line('M68 52Q80 66 78 82')+line('M132 52Q120 66 122 82');
+      break;
+    case 'shoe':
+      body='<path d="M24 108Q58 104 78 82L96 92Q122 112 166 118Q184 122 184 140L184 152L24 152Z" fill="'+f+'" '+sw+'/><rect x="20" y="148" width="168" height="16" rx="8" fill="#F4F4F0" '+sw+'/>'+line('M90 98l12-8M102 106l12-8M114 112l12-8',2.2);
+      break;
+    case 'bag':
+      body='<path d="M72 78Q72 34 100 34Q128 34 128 78" fill="none" stroke="'+st+'" stroke-width="5" stroke-linecap="round"/><path d="M48 78H152L162 172H38Z" fill="'+f+'" '+sw+'/>'+line('M48 98H152',1.5);
+      break;
+    case 'cap':
+      body='<path d="M44 128Q44 58 100 58Q156 58 156 128Z" fill="'+f+'" '+sw+'/><path d="M40 128H178Q190 132 180 144Q130 138 52 138Q38 138 40 128Z" fill="'+shade(item.color,-.2)+'" '+sw+'/><circle cx="100" cy="60" r="4" fill="'+st+'"/>';
+      break;
+  }
+  return ff.defs + body;
+}
+
+/* ====== rak gantung di hero ====== */
+function buildRail(){
+  var picks=[{shape:'jacket',color:'#4B6C93',pattern:'denim'},{shape:'tee',color:'#27406B',pattern:'stripe'},{shape:'pants',color:'#6B7348',pattern:'plain'},{shape:'bag',color:'#C9B27D',pattern:'plain'}];
+  var xs=[78,206,334,462];
+  var out='<line x1="8" y1="26" x2="532" y2="26" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>';
+  picks.forEach(function(p,i){
+    var x=xs[i];
+    out+='<g class="swing" style="transform-origin:'+x+'px 26px;animation-delay:'+(i*0.18)+'s">'
+      +'<circle cx="'+x+'" cy="26" r="7" fill="none" stroke="var(--ink)" stroke-width="3"/>'
+      +'<path d="M'+x+' 33V54M'+(x-46)+' 84L'+x+' 54L'+(x+46)+' 84" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
+      +'<g transform="translate('+(x-62)+',56) scale(.62)">'+garment(p,'r'+i)+'</g></g>';
+  });
+  $('#rail').innerHTML=out;
+}
+
+/* ====== util ====== */
+function waLink(msg){ return 'https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg); }
+function fmtTime(t){ return new Date(t).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}); }
+function rank(s){ var L=['XS','S','M','L','XL','XXL'], i=L.indexOf(s); if(i>=0) return i; var n=parseFloat(s); return isNaN(n)?1000:100+n; }
+var tId; function toast(m){ var t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tId); tId=setTimeout(function(){t.classList.remove('on');},2400); }
+async function copyText(t){
+  try{ await navigator.clipboard.writeText(t); return true; }
+  catch(e){ try{ var ta=document.createElement('textarea'); ta.value=t; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); var ok=document.execCommand('copy'); ta.remove(); return ok; }catch(e2){ return false; } }
+}
+
+/* ====== katalog ====== */
+function visible(){
+  var list=S.items.filter(function(i){
+    if(S.cat!=='Semua' && i.category!==S.cat) return false;
+    if(S.size && i.size!==S.size) return false;
+    if(S.cond && i.condition!==S.cond) return false;
+    if(S.hideSold && i.status==='sold') return false;
+    if(S.onlyWish && S.wish.indexOf(i.id)<0) return false;
+    if(S.q){ var t=(i.name+' '+i.brand+' '+code(i)).toLowerCase(); if(t.indexOf(S.q.toLowerCase())<0) return false; }
+    return true;
+  });
+  var idx=function(i){ return S.items.indexOf(i); };
+  list.sort(function(a,b){
+    var sa=a.status==='sold'?1:0, sb=b.status==='sold'?1:0;
+    if(sa!==sb) return sa-sb;
+    if(S.sort==='low') return a.price-b.price;
+    if(S.sort==='high') return b.price-a.price;
+    return idx(a)-idx(b);
+  });
+  return list;
+}
+function hasPh(i){ return !!(i.photos&&i.photos.length); }
+function picHTML(i,pre,alt){
+  if(hasPh(i)) return '<img class="photo"'+(alt?' id="mainPh"':' loading="lazy"')+' src="'+esc(i.photos[0])+'" alt="'+esc(alt||'')+'">';
+  return '<svg class="pic" viewBox="0 0 200 200" aria-hidden="true">'+garment(i,pre+i.id)+'</svg>';
+}
+function cardHTML(i,n){
+  var sold=i.status==='sold', hold=i.status==='hold', wished=S.wish.indexOf(i.id)>=0;
+  var badge = sold?'' : hold ? '<span class="badge hold">Di-hold</span>' : (i.fresh?'<span class="badge">Baru drop</span>':'');
+  return '<article class="item'+(sold?' is-sold':'')+'">'
+    +'<div class="tile">'
+    +picHTML(i,'c','')
+    +'<div class="tagwrap" style="--rot:'+(n%2?-3:3.5)+'deg"><span class="string"></span><div class="tag"><span class="tcode">'+code(i)+'</span><span class="tprice"><small>Rp</small>'+nf.format(i.price)+'</span></div></div>'
+    +badge+(sold?'<span class="stamp">Terjual</span>':'')
+    +'<button class="heart" type="button" data-wish="'+i.id+'" aria-pressed="'+wished+'" aria-label="Simpan '+esc(i.name)+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'
+    +'</div>'
+    +'<div class="meta"><h3><button class="open" type="button" data-open="'+i.id+'">'+esc(i.name)+'</button></h3>'
+    +'<p class="brandname">'+esc(i.brand)+'</p>'
+    +'<div class="badges"><span class="sz">'+esc(i.size)+'</span><span class="cdn c-'+CKEY[i.condition]+'">'+esc(i.condition)+'</span></div></div>'
+    +'</article>';
+}
+function renderCats(){
+  $('#cats').innerHTML=CATS.map(function(c){ return '<button class="chip" type="button" data-cat="'+c+'" aria-pressed="'+(S.cat===c)+'">'+c+'</button>'; }).join('')
+    +'<button class="chip" type="button" id="wishChip" aria-pressed="'+S.onlyWish+'">Simpanan ('+S.wish.length+')</button>';
+}
+function buildSizes(){
+  var sizes=[]; S.items.forEach(function(i){ if(sizes.indexOf(i.size)<0) sizes.push(i.size); });
+  sizes.sort(function(a,b){ return rank(a)-rank(b); });
+  var el=$('#fSize'), cur=S.size;
+  el.innerHTML='<option value="">Semua ukuran</option>'+sizes.map(function(s){ return '<option value="'+esc(s)+'"'+(s===cur?' selected':'')+'>'+esc(s)+'</option>'; }).join('');
+}
+function renderShop(){
+  renderCats();
+  var list=visible();
+  $('#count').textContent='Menampilkan '+list.length+' dari '+S.items.length+' barang';
+  $('#grid').innerHTML=list.length? list.map(cardHTML).join('') :
+    '<div class="empty"><p><b>Belum ada barang yang cocok.</b></p><p class="muted">Coba kategori atau ukuran lain, atau tampilkan semua barang.</p><button class="btn btn-ghost" type="button" id="resetF">Reset filter</button></div>';
+}
+
+/* ====== detail ====== */
+var dlg=$('#dlg'), openId=null;
+function statusAction(i){
+  var name=i.name+' ('+code(i)+')';
+  if(i.status==='sold') return {label:'Minta barang serupa lewat WhatsApp',cls:'btn-ghost',href:waLink('Halo kak, aku cari barang seperti '+i.name+' (kategori '+i.category+', ukuran '+i.size+'). Kalau ada yang serupa, kabari aku ya.')};
+  if(i.status==='hold') return {label:'Masuk antrean lewat WhatsApp',cls:'btn-ghost',href:waLink('Halo kak, aku tertarik dengan '+name+' yang sedang di-hold. Kalau batal, kabari aku ya.')};
+  return {label:'Beli lewat WhatsApp',cls:'btn-wa',href:waLink('Halo kak, aku mau beli '+name+', ukuran '+i.size+', '+rp(i.price)+'. Masih tersedia?')};
+}
+function openDetail(id){
+  var i=S.items.filter(function(x){return x.id===id;})[0]; if(!i) return;
+  openId=id;
+  var a=statusAction(i), wished=S.wish.indexOf(id)>=0;
+  var stText = i.status==='sold' ? 'Barang ini sudah terjual.' : i.status==='hold' ? 'Sedang di-hold sampai '+fmtTime(i.holdUntil)+'. Kalau pembeli batal, barang kembali tersedia.' : 'Admin akan konfirmasi stok, lalu mengirim link pembayaran (transfer, e-wallet, atau QRIS). Barang di-hold 30 menit selama kamu membayar.';
+  dlg.innerHTML=
+    '<div class="tile'+(i.status==='sold'?' is-sold':'')+'" style="position:relative">'
+    +picHTML(i,'d',i.name)
+    +'<div class="tagwrap"><span class="string"></span><div class="tag"><span class="tcode">'+code(i)+'</span><span class="tprice"><small>Rp</small>'+nf.format(i.price)+'</span></div></div>'
+    +(i.status==='sold'?'<span class="stamp">Terjual</span>':'')
+    +(hasPh(i)&&i.photos.length>1?'<div class="gal">'+i.photos.map(function(p,k){ return '<button type="button" class="thumb" data-ph="'+k+'" aria-label="Foto '+(k+1)+'" aria-current="'+(k===0)+'"><img src="'+esc(p)+'" alt=""></button>'; }).join('')+'</div>':'')+'</div>'
+    +'<div class="info">'
+    +'<button class="x" type="button" data-close aria-label="Tutup"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>'
+    +'<div class="who"><span>'+esc(i.brand)+'</span><span>'+code(i)+'</span></div>'
+    +'<h2>'+esc(i.name)+'</h2>'
+    +'<p class="price">'+rp(i.price)+'</p>'
+    +'<div class="badges"><span class="sz">'+esc(i.size)+'</span><span class="cdn c-'+CKEY[i.condition]+'">'+esc(i.condition)+'</span></div>'
+    +'<p class="note">'+esc(i.note||'')+'</p>'
+    +(i.measures&&i.measures.length?'<dl class="measures">'+i.measures.map(function(m){return '<dt>'+esc(m[0])+'</dt><dd>'+esc(m[1])+'</dd>';}).join('')+'</dl>':'<div style="height:16px"></div>')
+    +'<div class="actions"><a class="btn '+a.cls+'" href="'+a.href+'" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'+a.label+'</a>'
+    +'<button class="btn btn-ghost" type="button" data-dwish="'+id+'" aria-pressed="'+wished+'">'+(wished?'Tersimpan':'Simpan ke wishlist')+'</button></div>'
+    +'<p class="small">'+stText+'</p>'
+    +'</div>';
+  dlg.showModal();
+}
+dlg.addEventListener('click',function(e){
+  if(e.target===dlg || e.target.closest('[data-close]')){ dlg.close(); return; }
+  var ph=e.target.closest('[data-ph]');
+  if(ph){ var it=find(openId); $('#mainPh').src=it.photos[+ph.dataset.ph]; dlg.querySelectorAll('[data-ph]').forEach(function(b){ b.setAttribute('aria-current', b===ph); }); return; }
+  var w=e.target.closest('[data-dwish]');
+  if(w){ toggleWish(parseInt(w.dataset.dwish,10)); var on=S.wish.indexOf(openId)>=0; w.setAttribute('aria-pressed',on); w.textContent=on?'Tersimpan':'Simpan ke wishlist'; }
+});
+function toggleWish(id){
+  var k=S.wish.indexOf(id);
+  if(k>=0) S.wish.splice(k,1); else S.wish.push(id);
+  save(); renderShop();
+}
+
+/* ====== admin ====== */
+function renderAdmin(){
+  var n={ready:0,hold:0,sold:0}, omzet=0;
+  S.items.forEach(function(i){ n[i.status]++; if(i.status==='sold') omzet+=i.price; });
+  $('#stats').innerHTML=
+    '<div class="stat"><span>Tersedia</span><b>'+n.ready+'</b></div>'
+   +'<div class="stat"><span>Di-hold</span><b>'+n.hold+'</b></div>'
+   +'<div class="stat"><span>Terjual</span><b>'+n.sold+'</b></div>'
+   +'<div class="stat"><span>Omzet</span><b>'+rp(omzet)+'</b></div>';
+  $('#adminRows').innerHTML=S.items.map(function(i){
+    return '<tr><td><div class="namecell">'+(hasPh(i)?'<img class="rowpic" src="'+esc(i.photos[0])+'" alt="">':'<span class="rowpic"></span>')+'<div><b>'+code(i)+'</b><small>'+esc(i.name)+'</small></div></div></td>'
+      +'<td><input type="number" min="0" step="5000" value="'+i.price+'" data-price="'+i.id+'" aria-label="Harga '+esc(i.name)+'"></td>'
+      +'<td><select data-status="'+i.id+'" aria-label="Status '+esc(i.name)+'">'
+      +'<option value="ready"'+(i.status==='ready'?' selected':'')+'>Tersedia</option>'
+      +'<option value="hold"'+(i.status==='hold'?' selected':'')+'>Di-hold 30 menit</option>'
+      +'<option value="sold"'+(i.status==='sold'?' selected':'')+'>Terjual</option></select>'
+      +(i.status==='hold'&&i.holdUntil?'<small>sampai '+fmtTime(i.holdUntil)+'</small>':'')+'</td>'
+      +'<td><div class="acts"><button class="btn btn-ghost sm" type="button" data-bill="'+i.id+'">Salin tagihan</button><button class="btn btn-ghost sm" type="button" data-photo="'+i.id+'">'+(hasPh(i)?'Ganti foto':'Tambah foto')+'</button>'+(hasPh(i)?'<button class="btn btn-ghost sm" type="button" data-rmphoto="'+i.id+'">Hapus foto</button>':'')+'</div></td></tr>';
+  }).join('');
+}
+function find(id){ return S.items.filter(function(x){return x.id===id;})[0]; }
+$('#adminRows').addEventListener('change',function(e){
+  var t=e.target, i;
+  if(t.dataset.price){ i=find(+t.dataset.price); i.price=Math.max(0,parseInt(t.value,10)||0); save(); renderShop(); renderAdmin(); toast('Harga diperbarui'); }
+  if(t.dataset.status){ i=find(+t.dataset.status); i.status=t.value; i.holdUntil = t.value==='hold' ? Date.now()+30*60*1000 : null; save(); renderShop(); renderAdmin(); toast('Status '+code(i)+' diperbarui'); }
+});
+$('#adminRows').addEventListener('click',async function(e){
+  var pb=e.target.closest('[data-photo]');
+  if(pb){ photoTarget=+pb.dataset.photo; $('#rowPhoto').click(); return; }
+  var rm=e.target.closest('[data-rmphoto]');
+  if(rm){ var it=find(+rm.dataset.rmphoto); it.photos=[]; save(); renderShop(); renderAdmin(); toast('Foto dihapus'); return; }
+  var b=e.target.closest('[data-bill]'); if(!b) return;
+  var i=find(+b.dataset.bill);
+  var txt='Halo kak! '+i.name+' ('+code(i)+') masih tersedia dan di-hold 30 menit untuk kamu.\nTotal: '+rp(i.price)+' + ongkir.\nBayar lewat transfer, e-wallet, atau QRIS di link ini: [tempel link pembayaran]\nSetelah bayar, kirim bukti ke chat ini ya.';
+  var ok=await copyText(txt);
+  toast(ok?'Teks tagihan disalin':'Browser menolak menyalin teks');
+});
+$('#addForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var f=new FormData(e.target);
+  var id=S.items.reduce(function(m,i){return Math.max(m,i.id);},0)+1;
+  var cat=f.get('category');
+  S.items.unshift({id:id,name:String(f.get('name')).trim(),brand:String(f.get('brand')||'Tanpa merek').trim()||'Tanpa merek',category:cat,size:String(f.get('size')).trim(),condition:f.get('condition'),price:parseInt(f.get('price'),10)||0,color:f.get('color'),pattern:'plain',shape:SHAPE_BY_CAT[cat],fresh:true,status:'ready',note:'',measures:[],photos:newPhotos.slice()});
+  var ok=save(); newPhotos=[]; renderNew(); e.target.reset(); buildSizes(); renderShop(); renderAdmin(); toast(ok?'Barang ditambahkan ke katalog':'Barang ditambahkan, tetapi penyimpanan browser penuh');
+});
+$('#resetDemo').addEventListener('click',function(){
+  S.items=seed(); S.wish=[]; save(); buildSizes(); renderShop(); renderAdmin(); toast('Data demo dikembalikan');
+});
+
+/* ====== upload foto (dikecilkan otomatis, disimpan di browser) ====== */
+function readFile(f){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(){ res(r.result); }; r.onerror=rej; r.readAsDataURL(f); }); }
+function shrink(src,max){ return new Promise(function(res,rej){ var img=new Image(); img.onload=function(){ var s=Math.min(1,max/Math.max(img.width,img.height)), c=document.createElement('canvas'); c.width=Math.round(img.width*s); c.height=Math.round(img.height*s); c.getContext('2d').drawImage(img,0,0,c.width,c.height); res(c.toDataURL('image/jpeg',.7)); }; img.onerror=rej; img.src=src; }); }
+async function readPhotos(files,max){ var out=[], list=Array.prototype.slice.call(files,0,max||4); for(var k=0;k<list.length;k++){ out.push(await shrink(await readFile(list[k]),800)); } return out; }
+var photoTarget=null, newPhotos=[];
+function renderNew(){ $('#newThumbs').innerHTML=newPhotos.map(function(p,k){ return '<div class="thumb"><img src="'+p+'" alt="Foto '+(k+1)+'"><button class="rm" type="button" data-rmnew="'+k+'" aria-label="Hapus foto '+(k+1)+'">&times;</button></div>'; }).join(''); }
+$('#newPhotos').addEventListener('change',async function(e){
+  var room=4-newPhotos.length;
+  if(room<=0){ toast('Maksimal 4 foto'); e.target.value=''; return; }
+  try{ newPhotos=newPhotos.concat(await readPhotos(e.target.files,room)); }catch(x){ toast('File ini tidak bisa dibaca sebagai foto'); }
+  e.target.value=''; renderNew();
+});
+$('#newThumbs').addEventListener('click',function(e){ var r=e.target.closest('[data-rmnew]'); if(r){ newPhotos.splice(+r.dataset.rmnew,1); renderNew(); } });
+$('#rowPhoto').addEventListener('change',async function(e){
+  var files=e.target.files;
+  if(!files.length||photoTarget==null) return;
+  var it=find(photoTarget);
+  toast('Memproses foto...');
+  try{ it.photos=await readPhotos(files,4); }catch(x){ toast('File ini tidak bisa dibaca sebagai foto'); e.target.value=''; return; }
+  e.target.value='';
+  toast(save()?'Foto disimpan':'Penyimpanan browser penuh. Foto hanya tampil selama sesi ini');
+  renderShop(); renderAdmin();
+});
+
+/* ====== interaksi ====== */
+$('#cats').addEventListener('click',function(e){
+  var c=e.target.closest('[data-cat]');
+  if(c){ S.cat=c.dataset.cat; renderShop(); return; }
+  if(e.target.closest('#wishChip')){ S.onlyWish=!S.onlyWish; renderShop(); }
+});
+$('#grid').addEventListener('click',function(e){
+  var w=e.target.closest('[data-wish]'); if(w){ toggleWish(+w.dataset.wish); return; }
+  var o=e.target.closest('[data-open]'); if(o){ openDetail(+o.dataset.open); return; }
+  if(e.target.closest('#resetF')){ S.cat='Semua';S.size='';S.cond='';S.q='';S.hideSold=false;S.onlyWish=false; $('#q').value='';$('#fCond').value='';$('#fSold').checked=false; buildSizes(); renderShop(); }
+});
+$('#q').addEventListener('input',function(e){ S.q=e.target.value.trim(); renderShop(); });
+$('#fSize').addEventListener('change',function(e){ S.size=e.target.value; renderShop(); });
+$('#fCond').addEventListener('change',function(e){ S.cond=e.target.value; renderShop(); });
+$('#fSort').addEventListener('change',function(e){ S.sort=e.target.value; renderShop(); });
+$('#fSold').addEventListener('change',function(e){ S.hideSold=e.target.checked; renderShop(); });
+
+/* ====== login admin (gerbang demo di sisi browser, bukan keamanan server) ====== */
+var ADMIN_HASH='58f8f77e1a58f09b244bf5fc656ec534b852eb72eff11b82f410ac4efd6b7b83';
+var SKEY='gt-admin-session', HKEY='gt-admin-hash', authedMem=false;
+function adminHash(){ try{ return localStorage.getItem(HKEY)||ADMIN_HASH; }catch(e){ return ADMIN_HASH; } }
+function isAuthed(){ if(authedMem) return true; try{ return sessionStorage.getItem(SKEY)==='1'; }catch(e){ return false; } }
+function setAuthed(v){ authedMem=v; try{ if(v) sessionStorage.setItem(SKEY,'1'); else sessionStorage.removeItem(SKEY); }catch(e){} }
+async function sha(t){ var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)); return Array.prototype.map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,'0');}).join(''); }
+function cred(u,p){ return sha('fakebenad:'+u.trim().toLowerCase()+':'+p); }
+var fails=0, lockUntil=0;
+$('#loginForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  var err=$('#loginErr'), now=Date.now();
+  if(now<lockUntil){ err.textContent='Terlalu banyak percobaan. Coba lagi dalam '+Math.ceil((lockUntil-now)/1000)+' detik.'; err.hidden=false; return; }
+  var f=new FormData(e.target);
+  try{
+    var h=await cred(String(f.get('user')),String(f.get('pass')));
+    if(h===adminHash()){ fails=0; err.hidden=true; setAuthed(true); e.target.reset(); setView('admin'); toast('Berhasil masuk'); return; }
+  }catch(x){ err.textContent='Browser ini tidak mendukung login. Gunakan browser versi terbaru.'; err.hidden=false; return; }
+  fails++; if(fails>=5){ lockUntil=Date.now()+30000; fails=0; }
+  err.textContent='Username atau password salah.'; err.hidden=false;
+});
+$('#logout').addEventListener('click',function(){ setAuthed(false); setView('shop'); toast('Kamu sudah keluar'); });
+$('#pwForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  var f=new FormData(e.target);
+  if(await cred('admin',String(f.get('old')))!==adminHash()){ toast('Password saat ini salah'); return; }
+  var nh=await cred('admin',String(f.get('new')));
+  try{ localStorage.setItem(HKEY,nh); }catch(x){ toast('Gagal menyimpan password baru'); return; }
+  e.target.reset(); toast('Password diganti');
+});
+
+function setView(v){
+  var authed=isAuthed();
+  $('#shopView').hidden = v!=='shop';
+  $('#loginView').hidden = !(v==='admin' && !authed);
+  $('#adminView').hidden = !(v==='admin' && authed);
+  $('#fab').hidden = v!=='shop';
+  document.querySelectorAll('[data-view]').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.view===v); });
+  if(v==='admin' && authed) renderAdmin();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('[data-view]').forEach(function(b){ b.addEventListener('click',function(){ setView(b.dataset.view); }); });
+
+/* ====== countdown drop (Jumat 19.00 WIB) dan masa hold ====== */
+function nextDrop(){
+  var now=Date.now(), w=new Date(now+7*3600e3);
+  var add=(5-w.getUTCDay()+7)%7;
+  var t=Date.UTC(w.getUTCFullYear(),w.getUTCMonth(),w.getUTCDate()+add,12,0,0);
+  if(t<=now) t+=7*864e5;
+  return t;
+}
+var drop=nextDrop();
+var p2=function(n){ return String(n).padStart(2,'0'); };
+function tick(){
+  var d=drop-Date.now(); if(d<=0){ drop=nextDrop(); d=drop-Date.now(); }
+  var s=Math.floor(d/1000);
+  $('#cdD').textContent=p2(Math.floor(s/86400));
+  $('#cdH').textContent=p2(Math.floor(s%86400/3600));
+  $('#cdM').textContent=p2(Math.floor(s%3600/60));
+  $('#cdS').textContent=p2(s%60);
+  var ch=false, now=Date.now();
+  S.items.forEach(function(i){ if(i.status==='hold' && i.holdUntil && i.holdUntil<=now){ i.status='ready'; i.holdUntil=null; ch=true; } });
+  if(ch){ save(); renderShop(); if(!$('#adminView').hidden) renderAdmin(); }
+}
+
+/* ====== init ====== */
+var sel=$('#addForm select[name="category"]');
+sel.innerHTML=CATS.slice(1).map(function(c){ return '<option>'+c+'</option>'; }).join('');
+var hello=waLink('Halo kak, aku mau tanya soal barang di katalog fakebenad.');
+$('#fab').href=hello; $('#footWa').href=hello;
+buildRail(); buildSizes(); renderShop(); tick(); setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
